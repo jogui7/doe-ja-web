@@ -27,7 +27,8 @@
         "import/no-unresolved": "error",
         "import/extensions": [1, "never"],
         "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
-        "react/jsx-props-no-spreading": [0]
+        "react/jsx-props-no-spreading": [0],
+        "prettier/prettier": ["error", { "endOfLine": "auto" }]
     },
     "settings": {
         "import/resolver": {
