@@ -28,7 +28,7 @@ function styles(theme: Theme) {
   }
 }
 
-function Login() {
+function SignUp() {
   const doeJaClasses = useDoeJaStyles()
   const classes = useClasses(styles)
 
@@ -49,20 +49,29 @@ function Login() {
             <Paper elevation={0} className={classes.paper}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
+                  <TextField label="nome completo" {...inputConfig} />
+                </Grid>
+                <Grid item xs={12}>
                   <TextField label="email" {...inputConfig} />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField label="cpf" {...inputConfig} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField label="senha" {...inputConfig} />
                 </Grid>
                 <Grid item xs={12}>
+                  <TextField label="confirmar senha" {...inputConfig} />
+                </Grid>
+                <Grid item xs={12}>
                   <Grid container spacing={1} justifyContent="space-between">
                     <Grid item xs="auto">
-                      <Link to="/cadastre-se" className={doeJaClasses.link}>
-                        <Button variant="text">Criar conta</Button>
+                      <Link to="/login" className={doeJaClasses.link}>
+                        <Button variant="text">Voltar</Button>
                       </Link>
                     </Grid>
                     <Grid item xs="auto">
-                      <Button variant="contained">Entrar</Button>
+                      <Button variant="contained">Cadastrar</Button>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -75,4 +84,4 @@ function Login() {
   )
 }
 
-export default Login
+export default SignUp
