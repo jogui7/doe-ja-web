@@ -38,14 +38,14 @@ function Login() {
         <Grid container alignItems="center" className={classes.grid}>
           <Grid item xs="auto">
             <Box display="flex" alignItems="center" justifyContent="center">
-              <img
+              {/* <img
                 src="https://prefonline-savein.cdn.jelastic.net/wp-content/uploads/sites/20/2018/05/Ilustrativa.jpg"
                 alt="logo"
                 height={300}
-              />
+              /> */}
             </Box>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={5}>
             <Paper elevation={0} className={classes.paper}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
