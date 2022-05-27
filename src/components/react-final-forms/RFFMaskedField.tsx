@@ -1,4 +1,4 @@
-import React, { FocusEvent } from 'react'
+import { FocusEvent } from 'react'
 import { Field } from 'react-final-form'
 import { FieldValidator } from 'final-form'
 import MaskedField, { MaskedFieldProps } from '../inputs/MaskedField'
