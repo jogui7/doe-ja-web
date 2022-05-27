@@ -13,6 +13,7 @@ import RFFMaskedField from '../components/react-final-forms/RFFMaskedField'
 import { cpfRegex } from '../utils/regexes'
 import { yupValidateCPF } from '../utils/validators'
 import RFFPassword from '../components/react-final-forms/RFFPassword'
+import { SignUpFormData } from './signUp.types'
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -38,10 +39,10 @@ const validationSchema = yup.object().shape({
     .oneOf([yup.ref('password')], 'senhas precisam ser iguais'),
 })
 
-const validate = async (values: any) =>
+const validate = async (values: SignUpFormData) =>
   yupValidation(validationSchema)({ ...values })
 
-function styles(theme: Theme) {
+const styles = (theme: Theme) => {
   return {
     paper: css({
       padding: theme.spacing(2),
@@ -59,8 +60,8 @@ function SignUp() {
   const doeJaClasses = useDoeJaStyles()
   const classes = useClasses(styles)
 
-  const onSubmit = (values: any) => {
-    console.log(values)
+  const onSubmit = (values: SignUpFormData) => {
+    return values
   }
 
   return (
