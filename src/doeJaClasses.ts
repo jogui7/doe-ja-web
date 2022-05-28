@@ -15,6 +15,7 @@ function useDoeJaStyles(): { [key: string]: string } {
     }),
     link: css({
       textDecoration: 'none',
+      color: 'inherit',
     }),
   }
 }
