@@ -13,6 +13,10 @@ function useDoeJaStyles(): { [key: string]: string } {
       height: '100vh',
       backgroundColor: theme.palette.primary.main,
     }),
+    link: css({
+      textDecoration: 'none',
+      color: 'inherit',
+    }),
   }
 }
 

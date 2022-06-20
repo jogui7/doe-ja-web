@@ -7,9 +7,12 @@ import useDoeJaStyles from '../doeJaClasses'
 import useClasses from '../hooks/useClasses'
 import { inputConfig } from '../components/react-final-forms/inputConfigs'
 import yupValidation from '../lib/yupValdiation'
-import { LoginFormData } from './login.types'
 import RFFTextField from '../components/react-final-forms/RFFTextField'
+import RFFMaskedField from '../components/react-final-forms/RFFMaskedField'
+import { cpfRegex } from '../utils/regexes'
+import { yupValidateCPF } from '../utils/validators'
 import RFFPassword from '../components/react-final-forms/RFFPassword'
+import { SignUpFormData } from './signUp.types'
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -17,13 +20,28 @@ const validationSchema = yup.object().shape({
     .trim()
     .email('insira um email válido')
     .required('obrigatório'),
-  password: yup.string().trim().required('obrigatório'),
+  name: yup.string().trim().required('obrigatório'),
+  cpf: yup
+    .string()
+    .trim()
+    .required('obrigatório')
+    .test('test-cpf', 'cpf inválido', yupValidateCPF),
+  password: yup
+    .string()
+    .trim()
+    .required('obrigatório')
+    .min(8, 'mínimo de oito characteres'),
+  confirmPassword: yup
+    .string()
+    .trim()
+    .required('obrigatório')
+    .oneOf([yup.ref('password')], 'senhas precisam ser iguais'),
 })
 
-const validate = async (values: LoginFormData) =>
+const validate = async (values: SignUpFormData) =>
   yupValidation(validationSchema)({ ...values })
 
-function styles(theme: Theme) {
+const styles = (theme: Theme) => {
   return {
     paper: css({
       padding: theme.spacing(2),
@@ -37,11 +55,11 @@ function styles(theme: Theme) {
   }
 }
 
-function Login() {
+function SignUp() {
   const doeJaClasses = useDoeJaStyles()
   const classes = useClasses(styles)
 
-  const onSubmit = (values: LoginFormData) => {
+  const onSubmit = (values: SignUpFormData) => {
     return values
   }
 
@@ -62,12 +80,27 @@ function Login() {
             <Paper elevation={0} className={classes.paper}>
               <Form onSubmit={onSubmit} validate={validate}>
                 {({ handleSubmit }) => (
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <RFFTextField
+                          name="name"
+                          label="nome completo"
+                          {...inputConfig}
+                        />
+                      </Grid>
                       <Grid item xs={12}>
                         <RFFTextField
                           label="email"
                           name="email"
+                          {...inputConfig}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <RFFMaskedField
+                          name="cpf"
+                          label="cpf"
+                          mask={cpfRegex}
                           {...inputConfig}
                         />
                       </Grid>
@@ -79,26 +112,26 @@ function Login() {
                         />
                       </Grid>
                       <Grid item xs={12}>
+                        <RFFPassword
+                          label="confirmar senha"
+                          name="confirmPassword"
+                          {...inputConfig}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
                         <Grid
                           container
                           spacing={1}
                           justifyContent="space-between"
                         >
                           <Grid item xs="auto">
-                            <Link
-                              to="/cadastre-se"
-                              className={doeJaClasses.link}
-                            >
-                              <Button variant="text">Criar conta</Button>
+                            <Link to="/login" className={doeJaClasses.link}>
+                              <Button variant="text">Voltar</Button>
                             </Link>
                           </Grid>
                           <Grid item xs="auto">
-                            <Button
-                              variant="contained"
-                              onClick={handleSubmit}
-                              type="submit"
-                            >
-                              Entrar
+                            <Button variant="contained" type="submit">
+                              Cadastrar
                             </Button>
                           </Grid>
                         </Grid>
@@ -115,4 +148,4 @@ function Login() {
   )
 }
 
-export default Login
+export default SignUp
