@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Button, Container, Grid, Paper, Theme } from '@mui/material'
 import { css } from '@emotion/css'
 import { Link } from 'react-router-dom'
