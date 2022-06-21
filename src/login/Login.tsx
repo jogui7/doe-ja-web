@@ -1,6 +1,6 @@
 import { Box, Button, Container, Grid, Paper, Theme } from '@mui/material'
 import { css } from '@emotion/css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Form } from 'react-final-form'
 import * as yup from 'yup'
 import useDoeJaStyles from '../doeJaClasses'
@@ -38,10 +38,13 @@ function styles(theme: Theme) {
 }
 
 function Login() {
+  const navigate = useNavigate()
   const doeJaClasses = useDoeJaStyles()
   const classes = useClasses(styles)
 
   const onSubmit = (values: LoginFormData) => {
+    localStorage.setItem('isLogged', 'true')
+    navigate('/')
     return values
   }
 
