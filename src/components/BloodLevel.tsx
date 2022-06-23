@@ -20,7 +20,7 @@ export default function BloodLevel({ level }: BloodLevelProps) {
       riseAnimation
       waveAnimation
       waveFrequency={2}
-      waveAmplitude={1}
+      waveAmplitude={2}
       circleStyle={{
         fill: '#FFF',
       }}

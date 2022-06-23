@@ -6,6 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { setToken } from '../services/api'
 import { BaseUser } from '../types/user.types'
 
 type ApplicationContextState = {
@@ -17,10 +18,12 @@ type ApplicationContextState = {
 type ApplicationContextProps = {
   state?: ApplicationContextState
   handleLogout: () => void
+  updateUser: (updatedUser: BaseUser) => void
 }
 
 const ApplicationContext = createContext<ApplicationContextProps>({
   handleLogout: () => ({}),
+  updateUser: (updatedUser: BaseUser) => updatedUser,
 })
 
 type ApplicationContextProviderProps = {
@@ -51,11 +54,17 @@ export function ApplicationContextProvider({
       return handleLogout()
     }
 
+    setToken(localSession)
     setSession(localSession)
     setUser(JSON.parse(localUser))
 
     return setIsLoading(false)
   }, [handleLogout])
+
+  const updateUser = useCallback((updatedUser: BaseUser) => {
+    setUser(updatedUser)
+    localStorage.setItem('user', JSON.stringify(updatedUser))
+  }, [])
 
   useEffect(() => {
     initContext()
@@ -69,8 +78,9 @@ export function ApplicationContextProvider({
         isLoading,
       },
       handleLogout,
+      updateUser,
     }),
-    [session, user, isLoading, handleLogout]
+    [session, user, isLoading, handleLogout, updateUser]
   )
 
   return (

@@ -60,8 +60,9 @@ function Login() {
       return
     }
 
-    setToken(response.data?.token || '')
-    localStorage.setItem('session', response.data?.token || '')
+    const session = `${response.data?.tipo} ${response.data?.token}`
+    setToken(session)
+    localStorage.setItem('session', session)
     localStorage.setItem('user', JSON.stringify(response.data?.usuario))
     handleMessage({
       type: 'success',

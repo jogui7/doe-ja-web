@@ -1,13 +1,23 @@
 import { Card, CardHeader } from '@mui/material'
 import BloodLevel from './BloodLevel'
 
-export default function BloodBankLevelCard() {
+type BloodBankLevelCardProps = {
+  name: string
+  address: string
+  level: number
+}
+
+export default function BloodBankLevelCard({
+  name,
+  address,
+  level,
+}: BloodBankLevelCardProps) {
   return (
-    <Card elevation={0}>
+    <Card elevation={0} sx={{ display: 'flex', height: '100%' }}>
       <CardHeader
-        avatar={<BloodLevel level={75} />}
-        title="Hemepar"
-        subheader="Tv. João Prosdócimo, 145 - Alto da XV, Curitiba - PR"
+        avatar={<BloodLevel level={level} />}
+        title={name}
+        subheader={address}
       />
     </Card>
   )

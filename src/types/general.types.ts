@@ -7,3 +7,11 @@ export type MenuOption = {
 export type ApiErrorData = {
   message: string
 }
+
+export type Address = {
+  rua: string
+  numero: string
+  bairro: string
+  cidade: string
+  uf: string
+}

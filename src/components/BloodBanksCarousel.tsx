@@ -3,8 +3,13 @@ import {
   KeyboardArrowRightRounded,
 } from '@mui/icons-material'
 import { Box, ButtonBase, IconButton, Radio } from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
 import Carousel, { ButtonGroupProps, DotProps } from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
+import { useApplicationContext } from '../contexts/ApplicationContext'
+import api from '../services/api'
+import { BloodBank } from '../types/bloodbank.types'
+import formatAddress from '../utils/formatters'
 import BloodBankLevelCard from './BloodBankLevelCard'
 
 function CustomButtomGroup({ previous, next }: ButtonGroupProps) {
@@ -34,6 +39,21 @@ function CustomDot({ onClick, active }: DotProps) {
 }
 
 export default function BloodBanksCarousel() {
+  const [bloodBanks, setBloodBanks] = useState<BloodBank[]>([])
+  const { state } = useApplicationContext()
+
+  const fetchBloodBanks = useCallback(async () => {
+    const response = await api.get<BloodBank[]>('/hemobanco')
+
+    if (response.ok) {
+      setBloodBanks(response.data || [])
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchBloodBanks()
+  }, [fetchBloodBanks])
+
   return (
     <Box position="relative">
       <Carousel
@@ -77,18 +97,25 @@ export default function BloodBanksCarousel() {
           },
         }}
       >
-        <Box paddingX={1}>
-          <BloodBankLevelCard />
-        </Box>
-        <Box paddingX={1}>
-          <BloodBankLevelCard />
-        </Box>
-        <Box paddingX={1}>
-          <BloodBankLevelCard />
-        </Box>
-        <Box paddingX={1}>
-          <BloodBankLevelCard />
-        </Box>
+        {bloodBanks.map((bloodBank) => (
+          <Box paddingX={1} key={bloodBank.id} height="100%">
+            <BloodBankLevelCard
+              name={bloodBank.nome}
+              level={
+                state?.user?.tipoSanguineo
+                  ? Number(bloodBank[state.user.tipoSanguineo])
+                  : 0
+              }
+              address={formatAddress({
+                rua: bloodBank.rua,
+                bairro: bloodBank.bairro,
+                cidade: bloodBank.cidade,
+                numero: bloodBank.numero,
+                uf: bloodBank.uf,
+              })}
+            />
+          </Box>
+        ))}
       </Carousel>
     </Box>
   )

@@ -16,15 +16,27 @@ import {
 } from '@mui/material'
 import { useApplicationContext } from '../contexts/ApplicationContext'
 import { MenuOption } from '../types/general.types'
-import BloodType from './BloodType'
+import BloodTypeAvatar from './BloodTypeAvatar'
 
-export default function UserCard() {
+type UserCardProps = {
+  onEdit: () => void
+}
+
+export default function UserCard({ onEdit }: UserCardProps) {
+  const { state } = useApplicationContext()
   const { handleLogout } = useApplicationContext()
+
+  if (!state) return null
+
+  const { user } = state
+
+  if (!user) return null
+
   const menuOptions: MenuOption[] = [
     {
       icon: <EditRounded />,
       label: 'Editar perfil',
-      onClick: () => ({}),
+      onClick: onEdit,
     },
     {
       icon: <BloodtypeRounded />,
@@ -40,15 +52,10 @@ export default function UserCard() {
 
   return (
     <Card elevation={0}>
-      <CardMedia
-        src="https://media-exp1.licdn.com/dms/image/C5603AQEeH8-gYBMExA/profile-displayphoto-shrink_800_800/0/1592441154721?e=1661385600&v=beta&t=Om1Nq9ZN83IyRM5WYT1NWaksMHKoVMtL4TId832q0BM"
-        component="img"
-        height="194"
-      />
+      <CardMedia src={user.linkImagem} component="img" height="250" />
       <CardHeader
-        avatar={<BloodType />}
-        title="João Guis"
-        subheader="Pode doar novamente!"
+        avatar={<BloodTypeAvatar bloodType={user?.tipoSanguineo} />}
+        title={user.nome || ''}
       />
       <Divider />
       <CardContent>
