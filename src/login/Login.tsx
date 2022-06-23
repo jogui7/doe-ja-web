@@ -7,9 +7,12 @@ import useDoeJaStyles from '../doeJaClasses'
 import useClasses from '../hooks/useClasses'
 import { inputConfig } from '../components/react-final-forms/inputConfigs'
 import yupValidation from '../lib/yupValdiation'
-import { LoginFormData } from './login.types'
+import { LoginFormData, LoginResponseData } from './login.types'
 import RFFTextField from '../components/react-final-forms/RFFTextField'
 import RFFPassword from '../components/react-final-forms/RFFPassword'
+import api, { setToken } from '../services/api'
+import { useSnackbar } from '../contexts/SnackbarContext'
+import { ApiErrorData } from '../types/general.types'
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -17,7 +20,7 @@ const validationSchema = yup.object().shape({
     .trim()
     .email('insira um email válido')
     .required('obrigatório'),
-  password: yup.string().trim().required('obrigatório'),
+  senha: yup.string().trim().required('obrigatório'),
 })
 
 const validate = async (values: LoginFormData) =>
@@ -41,11 +44,30 @@ function Login() {
   const navigate = useNavigate()
   const doeJaClasses = useDoeJaStyles()
   const classes = useClasses(styles)
+  const { handleMessage } = useSnackbar()
 
-  const onSubmit = (values: LoginFormData) => {
-    localStorage.setItem('isLogged', 'true')
+  const onSubmit = async (values: LoginFormData) => {
+    const response = await api.post<LoginResponseData, ApiErrorData>(
+      '/auth',
+      values
+    )
+
+    if (!response.ok) {
+      handleMessage({
+        type: 'error',
+        message: response.data?.message || '',
+      })
+      return
+    }
+
+    setToken(response.data?.token || '')
+    localStorage.setItem('session', response.data?.token || '')
+    localStorage.setItem('user', JSON.stringify(response.data?.usuario))
+    handleMessage({
+      type: 'success',
+      message: `Bem vindo, ${response.data?.usuario.nome}`,
+    })
     navigate('/')
-    return values
   }
 
   return (
@@ -77,7 +99,7 @@ function Login() {
                       <Grid item xs={12}>
                         <RFFPassword
                           label="senha"
-                          name="password"
+                          name="senha"
                           {...inputConfig}
                         />
                       </Grid>

@@ -5,6 +5,11 @@ import MuiAppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { Navigate, Outlet } from 'react-router-dom'
+import {
+  ApplicationContextProvider,
+  useApplicationContext,
+} from '../../contexts/ApplicationContext'
+import LoadingPage from '../LoadingPage'
 
 const Main = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -21,16 +26,19 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }))
 
-export default function AppWrap() {
-  if (
-    !localStorage.getItem('isLogged') ||
-    localStorage.getItem('isLogged') === 'false'
-  ) {
+function Wrap() {
+  const { state } = useApplicationContext()
+
+  if (state?.isLoading) {
+    return <LoadingPage />
+  }
+
+  if (!state?.session || !state?.user) {
     return <Navigate to="/login" replace />
   }
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <CssBaseline />
       <MuiAppBar position="fixed">
         <Toolbar>
@@ -44,5 +52,13 @@ export default function AppWrap() {
         <Outlet />
       </Main>
     </Box>
+  )
+}
+
+export default function AppWrap() {
+  return (
+    <ApplicationContextProvider>
+      <Wrap />
+    </ApplicationContextProvider>
   )
 }

@@ -1,7 +1,7 @@
 import {
-  CalendarMonthRounded,
   EditRounded,
   LogoutRounded,
+  BloodtypeRounded,
 } from '@mui/icons-material'
 import {
   Card,
@@ -14,12 +14,12 @@ import {
   MenuItem,
   MenuList,
 } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { useApplicationContext } from '../contexts/ApplicationContext'
 import { MenuOption } from '../types/general.types'
 import BloodType from './BloodType'
 
 export default function UserCard() {
-  const navigate = useNavigate()
+  const { handleLogout } = useApplicationContext()
   const menuOptions: MenuOption[] = [
     {
       icon: <EditRounded />,
@@ -27,17 +27,14 @@ export default function UserCard() {
       onClick: () => ({}),
     },
     {
-      icon: <CalendarMonthRounded />,
+      icon: <BloodtypeRounded />,
       label: 'Doar sangue',
       onClick: () => ({}),
     },
     {
       icon: <LogoutRounded />,
       label: 'Sair',
-      onClick: () => {
-        localStorage.setItem('isLogged', 'false')
-        navigate('/login')
-      },
+      onClick: handleLogout,
     },
   ]
 

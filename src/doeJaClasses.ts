@@ -12,6 +12,9 @@ function useDoeJaStyles(): { [key: string]: string } {
       width: '100vw',
       height: '100vh',
       backgroundColor: theme.palette.primary.main,
+      // backgroundImage: 'url(./index.webp)',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'contain',
     }),
     link: css({
       textDecoration: 'none',

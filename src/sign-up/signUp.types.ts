@@ -1,7 +1,7 @@
 export type SignUpFormData = {
-  name: string
+  nome: string
   email: string
   cpf: string
-  password: string
-  confirmPassword: string
+  senha: string
+  confirmaSenha: string
 }

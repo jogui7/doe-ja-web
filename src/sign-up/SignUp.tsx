@@ -1,6 +1,6 @@
 import { Box, Button, Container, Grid, Paper, Theme } from '@mui/material'
 import { css } from '@emotion/css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Form } from 'react-final-form'
 import * as yup from 'yup'
 import useDoeJaStyles from '../doeJaClasses'
@@ -13,6 +13,8 @@ import { cpfRegex } from '../utils/regexes'
 import { yupValidateCPF } from '../utils/validators'
 import RFFPassword from '../components/react-final-forms/RFFPassword'
 import { SignUpFormData } from './signUp.types'
+import api from '../services/api'
+import { useSnackbar } from '../contexts/SnackbarContext'
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -20,22 +22,22 @@ const validationSchema = yup.object().shape({
     .trim()
     .email('insira um email válido')
     .required('obrigatório'),
-  name: yup.string().trim().required('obrigatório'),
+  nome: yup.string().trim().required('obrigatório'),
   cpf: yup
     .string()
     .trim()
     .required('obrigatório')
     .test('test-cpf', 'cpf inválido', yupValidateCPF),
-  password: yup
+  senha: yup
     .string()
     .trim()
     .required('obrigatório')
     .min(8, 'mínimo de oito characteres'),
-  confirmPassword: yup
+  confirmaSenha: yup
     .string()
     .trim()
     .required('obrigatório')
-    .oneOf([yup.ref('password')], 'senhas precisam ser iguais'),
+    .oneOf([yup.ref('senha')], 'senhas precisam ser iguais'),
 })
 
 const validate = async (values: SignUpFormData) =>
@@ -58,9 +60,21 @@ const styles = (theme: Theme) => {
 function SignUp() {
   const doeJaClasses = useDoeJaStyles()
   const classes = useClasses(styles)
+  const { handleMessage } = useSnackbar()
+  const navigate = useNavigate()
 
-  const onSubmit = (values: SignUpFormData) => {
-    return values
+  const onSubmit = async (values: SignUpFormData) => {
+    const response = await api.post<unknown, { message: string }>(
+      '/cadastro',
+      values
+    )
+
+    if (!response.ok) {
+      handleMessage({ type: 'error', message: response.data?.message || '' })
+    }
+
+    handleMessage({ type: 'success', message: 'Cadastro realizado!' })
+    navigate('/login')
   }
 
   return (
@@ -84,7 +98,7 @@ function SignUp() {
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <RFFTextField
-                          name="name"
+                          name="nome"
                           label="nome completo"
                           {...inputConfig}
                         />
@@ -107,14 +121,14 @@ function SignUp() {
                       <Grid item xs={12}>
                         <RFFPassword
                           label="senha"
-                          name="password"
+                          name="senha"
                           {...inputConfig}
                         />
                       </Grid>
                       <Grid item xs={12}>
                         <RFFPassword
                           label="confirmar senha"
-                          name="confirmPassword"
+                          name="confirmaSenha"
                           {...inputConfig}
                         />
                       </Grid>

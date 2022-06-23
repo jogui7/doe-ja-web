@@ -1,9 +1,12 @@
 import { createTheme } from '@mui/material/styles'
 import { red } from '@mui/material/colors'
+import type {} from '@mui/x-data-grid/themeAugmentation'
 
-// A custom theme for this app
 const theme = createTheme({
   palette: {
+    text: {
+      primary: '#424242',
+    },
     primary: {
       main: '#e63e3d',
     },
@@ -12,6 +15,21 @@ const theme = createTheme({
     },
     error: {
       main: red.A400,
+    },
+  },
+  components: {
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#fff',
+          border: 'none',
+        },
+      },
+    },
+    MuiCircularProgress: {
+      styleOverrides: {
+        colorPrimary: { color: '#fff' },
+      },
     },
   },
 })

@@ -3,3 +3,7 @@ export type MenuOption = {
   label: string
   onClick: () => void
 }
+
+export type ApiErrorData = {
+  message: string
+}
