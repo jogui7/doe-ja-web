@@ -1,4 +1,12 @@
+import { BaseUser } from '../types/user.types'
+
 export type LoginFormData = {
   email: string
-  password: string
+  senha: string
+}
+
+export type LoginResponseData = {
+  token: string
+  tipo: string
+  usuario: BaseUser
 }
