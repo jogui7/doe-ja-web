@@ -49,7 +49,9 @@ function Select({
       variant={variant}
       disabled={disabled}
     >
-      <InputLabel {...inputLabelProps}>{label}</InputLabel>
+      <InputLabel {...inputLabelProps} shrink>
+        {label}
+      </InputLabel>
       <MuiSelect
         fullWidth={fullWidth}
         variant={variant}

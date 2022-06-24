@@ -38,15 +38,22 @@ export default function PreTriageModal({ open, onClose }: PreTriageModalProps) {
     )
 
     if (response.ok && response.data) {
-      setInitialData(response.data[response.data.length - 1])
+      setInitialData(response.data[0])
     }
   }, [state?.user?.id, open])
 
   const onSubmit = async (values: EditUserPreTriage) => {
-    const response = await api.post<UserPreTriage, ApiErrorData>(
-      `/pretriagem`,
-      { ...values, ist: values.dst, usuarioId: state?.user?.id }
-    )
+    const response = await (initialData?.id
+      ? api.put<UserPreTriage, ApiErrorData>(`/pretriagem/${initialData.id}`, {
+          ...values,
+          ist: values.dst,
+          usuarioId: state?.user?.id,
+        })
+      : api.post<UserPreTriage, ApiErrorData>(`/pretriagem`, {
+          ...values,
+          ist: values.dst,
+          usuarioId: state?.user?.id,
+        }))
 
     if (response.ok) {
       handleMessage({ message: 'Pré-triagem realizada!', type: 'success' })
@@ -65,7 +72,7 @@ export default function PreTriageModal({ open, onClose }: PreTriageModalProps) {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Pré-Triagem</DialogTitle>
+      <DialogTitle>Pré-triagem</DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -88,7 +95,7 @@ export default function PreTriageModal({ open, onClose }: PreTriageModalProps) {
                             label="Fez tatuagem nos ultimos 12 meses?"
                             name="tatuagem"
                             items={booleanOptions}
-                            initialValue={initialValues.tatuagem}
+                            initialValue={initialValues?.tatuagem}
                           />
                         </Grid>
                         <Grid item xs={12}>
@@ -97,7 +104,7 @@ export default function PreTriageModal({ open, onClose }: PreTriageModalProps) {
                             label="Já usou algum tipo de droga ilícita injetável?"
                             name="droga"
                             items={booleanOptions}
-                            initialValue={initialValues.droga}
+                            initialValue={initialValues?.droga}
                           />
                         </Grid>
                         <Grid item xs={12}>
@@ -106,7 +113,7 @@ export default function PreTriageModal({ open, onClose }: PreTriageModalProps) {
                             label="Tem alguma DSTs, ISTs ou outra transmissível através do sangue?"
                             name="dst"
                             items={booleanOptions}
-                            initialValue={initialValues.dst}
+                            initialValue={initialValues?.dst}
                           />
                         </Grid>
                         <Grid item xs={12}>
@@ -115,7 +122,7 @@ export default function PreTriageModal({ open, onClose }: PreTriageModalProps) {
                             label="Teve e/ou tem algum tipo de câncer?"
                             name="cancer"
                             items={booleanOptions}
-                            initialValue={initialValues.cancer}
+                            initialValue={initialValues?.cancer}
                           />
                         </Grid>
                         <Grid item xs={12}>
@@ -124,7 +131,7 @@ export default function PreTriageModal({ open, onClose }: PreTriageModalProps) {
                             label="Fez algum transplante de orgão ou medula?"
                             name="transplante"
                             items={booleanOptions}
-                            initialValue={initialValues.transplante}
+                            initialValue={initialValues?.transplante}
                           />
                         </Grid>
                       </Grid>

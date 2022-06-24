@@ -16,15 +16,21 @@ import {
   MenuList,
 } from '@mui/material'
 import { useApplicationContext } from '../contexts/ApplicationContext'
+import { IMAGE_DEFAULT_COVER_PATH } from '../lib/medias.lib'
 import { MenuOption } from '../types/general.types'
 import BloodTypeAvatar from './BloodTypeAvatar'
 
 type UserCardProps = {
   onEdit: () => void
   onFillPreTriage: () => void
+  onDonateBlood: () => void
 }
 
-export default function UserCard({ onEdit, onFillPreTriage }: UserCardProps) {
+export default function UserCard({
+  onEdit,
+  onFillPreTriage,
+  onDonateBlood,
+}: UserCardProps) {
   const { state } = useApplicationContext()
   const { handleLogout } = useApplicationContext()
 
@@ -48,7 +54,7 @@ export default function UserCard({ onEdit, onFillPreTriage }: UserCardProps) {
     {
       icon: <BloodtypeRounded />,
       label: 'Doar sangue',
-      onClick: () => ({}),
+      onClick: onDonateBlood,
     },
     {
       icon: <LogoutRounded />,
@@ -59,7 +65,11 @@ export default function UserCard({ onEdit, onFillPreTriage }: UserCardProps) {
 
   return (
     <Card elevation={0}>
-      <CardMedia src={user.linkImagem} component="img" height="250" />
+      <CardMedia
+        src={user.linkImagem || IMAGE_DEFAULT_COVER_PATH}
+        component="img"
+        height="250"
+      />
       <CardHeader
         avatar={<BloodTypeAvatar bloodType={user?.tipoSanguineo} />}
         title={user.nome || ''}

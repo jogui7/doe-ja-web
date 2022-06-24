@@ -1,14 +1,37 @@
-import { Box, Grid } from '@mui/material'
-import { useState } from 'react'
+import { Grid } from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
 import BloodBanksCarousel from '../components/BloodBanksCarousel'
+import DonateBloodModal from '../components/modals/DonateBloodModal'
 import EditProfileModal from '../components/modals/EditProfileModal'
 import PreTriageModal from '../components/modals/PreTriageModal'
 import MyDonations from '../components/MyDonations'
 import UserCard from '../components/UserCard'
+import { useApplicationContext } from '../contexts/ApplicationContext'
+import api from '../services/api'
+import { Donation } from '../types/bloodDonation.types'
 
 export default function HomePage() {
+  const { state } = useApplicationContext()
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openPreTriageModal, setOpenPreTriageModal] = useState(false)
+  const [openDonateBloodModal, setOpenDonateBloodModal] = useState(false)
+
+  const [donations, setDonations] = useState<Donation[]>([])
+  const [loadingDonations, setLoadingDonations] = useState(true)
+
+  const fetchDonations = useCallback(async () => {
+    setLoadingDonations(true)
+    const response = await api.get<Donation[]>(`/doacao/${state?.user?.id}`)
+
+    if (response.ok) {
+      setDonations(response.data || [])
+    }
+    setLoadingDonations(false)
+  }, [])
+
+  useEffect(() => {
+    fetchDonations()
+  }, [fetchDonations])
 
   return (
     <>
@@ -22,6 +45,7 @@ export default function HomePage() {
               <UserCard
                 onEdit={() => setOpenEditModal(true)}
                 onFillPreTriage={() => setOpenPreTriageModal(true)}
+                onDonateBlood={() => setOpenDonateBloodModal(true)}
               />
             </Grid>
           </Grid>
@@ -29,12 +53,7 @@ export default function HomePage() {
         <Grid item xs={12} sm={10}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Box bgcolor="green" height={200}>
-                últimas doações
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <MyDonations />
+              <MyDonations donations={donations} loading={loadingDonations} />
             </Grid>
           </Grid>
         </Grid>
@@ -46,6 +65,11 @@ export default function HomePage() {
       <EditProfileModal
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}
+      />
+      <DonateBloodModal
+        open={openDonateBloodModal}
+        onClose={() => setOpenDonateBloodModal(false)}
+        onSuccess={fetchDonations}
       />
     </>
   )
