@@ -2,6 +2,7 @@ import {
   EditRounded,
   LogoutRounded,
   BloodtypeRounded,
+  FilterAltRounded,
 } from '@mui/icons-material'
 import {
   Card,
@@ -20,9 +21,10 @@ import BloodTypeAvatar from './BloodTypeAvatar'
 
 type UserCardProps = {
   onEdit: () => void
+  onFillPreTriage: () => void
 }
 
-export default function UserCard({ onEdit }: UserCardProps) {
+export default function UserCard({ onEdit, onFillPreTriage }: UserCardProps) {
   const { state } = useApplicationContext()
   const { handleLogout } = useApplicationContext()
 
@@ -37,6 +39,11 @@ export default function UserCard({ onEdit }: UserCardProps) {
       icon: <EditRounded />,
       label: 'Editar perfil',
       onClick: onEdit,
+    },
+    {
+      icon: <FilterAltRounded />,
+      label: 'Pré-triagem',
+      onClick: onFillPreTriage,
     },
     {
       icon: <BloodtypeRounded />,

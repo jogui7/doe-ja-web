@@ -2,11 +2,13 @@ import { Box, Grid } from '@mui/material'
 import { useState } from 'react'
 import BloodBanksCarousel from '../components/BloodBanksCarousel'
 import EditProfileModal from '../components/modals/EditProfileModal'
+import PreTriageModal from '../components/modals/PreTriageModal'
 import MyDonations from '../components/MyDonations'
 import UserCard from '../components/UserCard'
 
 export default function HomePage() {
   const [openEditModal, setOpenEditModal] = useState(false)
+  const [openPreTriageModal, setOpenPreTriageModal] = useState(false)
 
   return (
     <>
@@ -17,7 +19,10 @@ export default function HomePage() {
         <Grid item xs={12} sm={2}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <UserCard onEdit={() => setOpenEditModal(true)} />
+              <UserCard
+                onEdit={() => setOpenEditModal(true)}
+                onFillPreTriage={() => setOpenPreTriageModal(true)}
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -34,6 +39,10 @@ export default function HomePage() {
           </Grid>
         </Grid>
       </Grid>
+      <PreTriageModal
+        open={openPreTriageModal}
+        onClose={() => setOpenPreTriageModal(false)}
+      />
       <EditProfileModal
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}

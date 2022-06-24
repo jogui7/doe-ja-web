@@ -95,7 +95,7 @@ export default function EditProfileModal({
                         type="submit"
                         size="small"
                       >
-                        Entrar
+                        Salvar
                       </Button>
                     </Grid>
                   </Grid>
