@@ -39,7 +39,7 @@ export default function HomePage() {
         <Grid item xs={12}>
           <BloodBanksCarousel />
         </Grid>
-        <Grid item xs={12} sm={4} md={3} lg={2}>
+        <Grid item xs={12} sm={4} xl={2}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <UserCard
@@ -50,7 +50,7 @@ export default function HomePage() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={8} md={9} lg={10}>
+        <Grid item xs={12} sm={8} xl={10}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <MyDonations donations={donations} loading={loadingDonations} />
